@@ -1,0 +1,6 @@
+code:
+  com.github:
+    test-app:
+      version: 0.1.0
+      generators:
+        play_2_x_json: test-generated
