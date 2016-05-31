@@ -5,7 +5,8 @@
   "main": "lib/index.js",
   "scripts": {
     "start": "nodemon index.js",
-    "test": "mocha --compilers js:babel-register --require babel-polyfill test; exit 0",
+    "test": "mocha --compilers js:babel-register --require babel-polyfill test/**; exit 0",
+    "test:single": "mocha --compilers js:babel-register --require babel-polyfill test/** -g ",
     "watch": "nodemon --exec \"npm run test\" --watch src --watch test-src",
     "format": "eslint --fix index.js server/** test/**; exit 0",
     "lint": "eslint index.js server/** test/**; exit 0",

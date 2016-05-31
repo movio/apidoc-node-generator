@@ -20,5 +20,11 @@ export default (router) => {
       const id = ctx.params.id;
       if (id in generators) ctx.body = generators[id].details;
       else ctx.status = 404;
+    })
+    .post('/invocations/:id', async ctx => {
+      const id = ctx.params.id;
+      const service = ctx.request.body.service;
+      if (id in generators) ctx.body = generators[id].generateCode(service);
+      else ctx.status = 404;
     });
 };
