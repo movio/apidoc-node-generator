@@ -1,23 +1,50 @@
+import * as _ from 'lodash/fp';
 
-export const details = {
+const details = {
   key: 'reduxSaga',
   name: 'Redux Sagas',
 };
 
-export function generateCode(service) {
-  // console.log(service.resources[0].operations)
+
+function createName(method, path) {
+  const splits = path.split('/').filter(Boolean).map(s => s.replace(/[_-]/g, '')); // remove empty
+  const mainParts = splits.filter((v) => !v.startsWith(':'));
+  const paramParts = splits.filter((v) => v.startsWith(':'));
+
+  const main = mainParts.map(s => _.capitalize(s)).join('And');
+
+  const params = paramParts.map(p => p.substring(1)).map(p => _.capitalize(p)).join('And');
+  const end = paramParts.length > 0 ? `By${params}` : '';
+
+  return method.toLowerCase() + main + end;
+}
+
+function createFile(resource, operation) {
+  const name = createName(operation.method, operation.path);
+
+  const contents = 'hey';
+
   return {
-    files: [
-      {
-        name: 'getGenerators',
-        dir: 'generator',
-        contents: 'Coming soon - redux sagas',
-      },
-      {
-        name: 'getGeneratorsByKey',
-        dir: 'generator',
-        contents: 'Coming soon - redux sagas',
-      },
-    ],
+    name,
+    dir: resource.type,
+    contents,
   };
 }
+
+function generateCode(service) {
+  const files = _.flatMap((resource) => {
+    return _.map((operation) => {
+      return createFile(resource, operation);
+    }, resource.operations);
+  }, service.resources);
+
+  return {
+    files,
+  };
+}
+
+export default {
+  details,
+  generateCode,
+  createName,
+};

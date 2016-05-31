@@ -4,12 +4,14 @@ import chai from 'chai';
 const expect = chai.expect;
 
 import app from '../../server/index';
+import reduxSaga from '../../server/reduxSaga';
+const createName = reduxSaga.createName;
 
 describe('Redux Saga', () => {
   it('first', (done) => {
     const service = {
       service: {
-        'resources': [
+        resources: [
           {
             type: 'generator',
             plural: 'generators',
@@ -105,12 +107,12 @@ describe('Redux Saga', () => {
         {
           name: 'getGenerators',
           dir: 'generator',
-          contents: 'Coming soon - redux sagas',
+          contents: 'hey',
         },
         {
           name: 'getGeneratorsByKey',
           dir: 'generator',
-          contents: 'Coming soon - redux sagas',
+          contents: 'hey',
         },
       ],
     };
@@ -122,4 +124,14 @@ describe('Redux Saga', () => {
       .expect(expected, done);
   });
 
+  it('createName', (done) => {
+    expect(createName('GET', '/generators')).to.equal('getGenerators');
+    expect(createName('POST', '/generators')).to.equal('postGenerators');
+    expect(createName('PUT', '/generators')).to.equal('putGenerators');
+    expect(createName('GET', '/generators/person/:id')).to.equal('getGeneratorsAndPersonById');
+    expect(createName('GET', '/generators/person/:id/:date'))
+      .to.equal('getGeneratorsAndPersonByIdAndDate');
+    expect(createName('GET', '/_generators_/person/:id')).to.equal('getGeneratorsAndPersonById');
+    done();
+  });
 });
