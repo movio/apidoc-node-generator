@@ -1,7 +1,7 @@
 import * as _ from 'lodash/fp';
 
 import jsonSchema from './jsonSchema';
-import reduxSaga from './reduxSaga';
+import * as reduxSaga from './reduxSaga';
 
 const generators = {
   jsonSchema,
