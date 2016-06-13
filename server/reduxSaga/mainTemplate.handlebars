@@ -18,29 +18,29 @@ function api(aPathParam, aQueryParam) {
 }
 
 const actionTypes = {
-  {{operation}}{{resource}}_{{operation}}: '{{operation}}{{resource}}/{{operation}}',
-  {{operation}}{{resource}}_doing: '{{operation}}{{resource}}/doing',
-  {{operation}}{{resource}}_success: '{{operation}}{{resource}}/success',
-  {{operation}}{{resource}}_failure: '{{operation}}{{resource}}/failure',
+  {{name}}_{{method}}: '{{name}}/{{method}}',
+  {{name}}_doing: '{{name}}/doing',
+  {{name}}_success: '{{name}}/success',
+  {{name}}_failure: '{{name}}/failure',
 };
 
 const actions = {
-  {{operation}}{{resource}}_{{operation}}: (aPathParam, aQueryParam) => ({
-    type: actionTypes.{{operation}}{{resource}}_{{operation}},
+  {{name}}_{{method}}: (aPathParam, aQueryParam) => ({
+    type: actionTypes.{{name}}_{{method}},
     payload: {
       aPathParam,
       aQueryParam,
     },
   }),
-  {{operation}}{{resource}}_doing: () => ({
-    type: actionTypes.{{operation}}{{resource}}_doing,
+  {{name}}_doing: () => ({
+    type: actionTypes.{{name}}_doing,
   }),
-  {{operation}}{{resource}}_success: (todos) => ({
-    type: actionTypes.{{operation}}{{resource}}_success,
+  {{name}}_success: (todos) => ({
+    type: actionTypes.{{name}}_success,
     payload: todos,
   }),
-  {{operation}}{{resource}}_failure: (err) => ({
-    type: actionTypes.{{operation}}{{resource}}_failure,
+  {{name}}_failure: (err) => ({
+    type: actionTypes.{{name}}_failure,
     payload: err,
     error: true,
   }),
@@ -49,11 +49,11 @@ const actions = {
 function* saga(action) {
   const { aPathParam, aQueryParam } = action.payload;
   try {
-    yield put(actions.{{operation}}{{resource}}_doing());
+    yield put(actions.{{name}}_doing());
     const { response } = yield call(api, aPathParam, aQueryParam);
-    yield put(actions.{{operation}}{{resource}}_success(response));
+    yield put(actions.{{name}}_success(response));
   } catch (error) {
-    yield put(actions.{{operation}}{{resource}}_failure(error));
+    yield put(actions.{{name}}_failure(error));
   }
 }
 
@@ -61,14 +61,14 @@ function* saga(action) {
  * Start this saga if you'd prefer to process every action
  */
 function* takeEverySaga() {
-  yield* takeEvery(actionTypes.{{operation}}{{resource}}_{{operation}}, saga);
+  yield* takeEvery(actionTypes.{{name}}_{{method}}, saga);
 }
 
 /**
  * Start this saga if you'd prefer to process only the latest action
  */
 function* takeLatestSaga() {
-  yield* takeLatest(actionTypes.{{operation}}{{resource}}_{{operation}}, saga);
+  yield* takeLatest(actionTypes.{{name}}_{{method}}, saga);
 }
 
 export {

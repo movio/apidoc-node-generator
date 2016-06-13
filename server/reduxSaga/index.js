@@ -25,7 +25,7 @@ function createName(method, path) {
 function createFile(resource, operation) {
   const name = createName(operation.method, operation.path);
 
-  const contents = code(resource, operation);
+  const contents = code(operation);
 
   return {
     name,
