@@ -30,6 +30,7 @@
   },
   "homepage": "https://github.com/movio/apidoc-node-generator#readme",
   "dependencies": {
+    "handlebars": "^4.0.5",
     "koa": "^2.0.0",
     "koa-bodyparser": "^3.1.0",
     "koa-logger": "^2.0.0",

@@ -1,7 +1,6 @@
 import chai from 'chai';
 const expect = chai.expect;
 import fs from 'fs';
-import path from 'path';
 
 import { code } from '../../server/reduxSaga';
 

@@ -1,0 +1,81 @@
+// This file is generated
+
+import { takeEvery, takeLatest } from 'redux-saga';
+import { call, put } from 'redux-saga/effects';
+
+function api(aPathParam, aQueryParam) {
+  return new Promise((resolve) => {
+    const response = {
+      todos: [
+        {
+          text: 'Use Redux',
+          completed: false,
+        },
+      ],
+    };
+    resolve(response);
+  });
+}
+
+const actionTypes = {
+  {{operation}}{{resource}}_{{operation}}: '{{operation}}{{resource}}/{{operation}}',
+  {{operation}}{{resource}}_doing: '{{operation}}{{resource}}/doing',
+  {{operation}}{{resource}}_success: '{{operation}}{{resource}}/success',
+  {{operation}}{{resource}}_failure: '{{operation}}{{resource}}/failure',
+};
+
+const actions = {
+  {{operation}}{{resource}}_{{operation}}: (aPathParam, aQueryParam) => ({
+    type: actionTypes.{{operation}}{{resource}}_{{operation}},
+    payload: {
+      aPathParam,
+      aQueryParam,
+    },
+  }),
+  {{operation}}{{resource}}_doing: () => ({
+    type: actionTypes.{{operation}}{{resource}}_doing,
+  }),
+  {{operation}}{{resource}}_success: (todos) => ({
+    type: actionTypes.{{operation}}{{resource}}_success,
+    payload: todos,
+  }),
+  {{operation}}{{resource}}_failure: (err) => ({
+    type: actionTypes.{{operation}}{{resource}}_failure,
+    payload: err,
+    error: true,
+  }),
+};
+
+function* saga(action) {
+  const { aPathParam, aQueryParam } = action.payload;
+  try {
+    yield put(actions.{{operation}}{{resource}}_doing());
+    const { response } = yield call(api, aPathParam, aQueryParam);
+    yield put(actions.{{operation}}{{resource}}_success(response));
+  } catch (error) {
+    yield put(actions.{{operation}}{{resource}}_failure(error));
+  }
+}
+
+/**
+ * Start this saga if you'd prefer to process every action
+ */
+function* takeEverySaga() {
+  yield* takeEvery(actionTypes.{{operation}}{{resource}}_{{operation}}, saga);
+}
+
+/**
+ * Start this saga if you'd prefer to process only the latest action
+ */
+function* takeLatestSaga() {
+  yield* takeLatest(actionTypes.{{operation}}{{resource}}_{{operation}}, saga);
+}
+
+export {
+  actions,
+  actionTypes,
+  api,
+  saga,
+  takeEverySaga,
+  takeLatestSaga,
+};

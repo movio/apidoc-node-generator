@@ -3,19 +3,12 @@
 import { takeEvery, takeLatest } from 'redux-saga';
 import { call, put } from 'redux-saga/effects';
 
-// FIXME - implement proper api
 function api(aPathParam, aQueryParam) {
   return new Promise((resolve) => {
-    // Use superagent
-    // FIXME - where do we get the hostname from?
     const response = {
       todos: [
         {
           text: 'Use Redux',
-          completed: false,
-        },
-        {
-          text: 'Use Saga',
           completed: false,
         },
       ],
