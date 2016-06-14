@@ -3,7 +3,7 @@
 import { takeEvery, takeLatest } from 'redux-saga';
 import { call, put } from 'redux-saga/effects';
 
-function api(aPathParam, aQueryParam) {
+function api({{parameterList operation}}) {
   return new Promise((resolve) => {
     const response = {
       todos: [
@@ -18,18 +18,23 @@ function api(aPathParam, aQueryParam) {
 }
 
 const actionTypes = {
-  {{name}}_{{method}}: '{{name}}/{{method}}',
+  {{name}}_{{toLowerCase operation.method}}: '{{name}}/{{toLowerCase operation.method}}',
   {{name}}_doing: '{{name}}/doing',
   {{name}}_success: '{{name}}/success',
   {{name}}_failure: '{{name}}/failure',
 };
 
 const actions = {
-  {{name}}_{{method}}: (aPathParam, aQueryParam) => ({
-    type: actionTypes.{{name}}_{{method}},
+  /**
+   * {{operation.description}}
+   {{#each operation.parameters}}
+   {{{jsdocParameter this}}}
+   {{/each}}
+   */
+  {{name}}_{{toLowerCase operation.method}}: ({{parameterList operation}}) => ({
+    type: actionTypes.{{name}}_{{toLowerCase operation.method}},
     payload: {
-      aPathParam,
-      aQueryParam,
+      {{parameterList operation lines=true}}
     },
   }),
   {{name}}_doing: () => ({
@@ -47,10 +52,12 @@ const actions = {
 };
 
 function* saga(action) {
-  const { aPathParam, aQueryParam } = action.payload;
+  {{#if operation.parameters.length}}
+  const { {{parameterList operation}} } = action.payload;
+  {{/if}}
   try {
     yield put(actions.{{name}}_doing());
-    const { response } = yield call(api, aPathParam, aQueryParam);
+    const { response } = yield call(api{{parameterList operation prefix=', '}});
     yield put(actions.{{name}}_success(response));
   } catch (error) {
     yield put(actions.{{name}}_failure(error));
@@ -61,14 +68,14 @@ function* saga(action) {
  * Start this saga if you'd prefer to process every action
  */
 function* takeEverySaga() {
-  yield* takeEvery(actionTypes.{{name}}_{{method}}, saga);
+  yield* takeEvery(actionTypes.{{name}}_{{toLowerCase operation.method}}, saga);
 }
 
 /**
  * Start this saga if you'd prefer to process only the latest action
  */
 function* takeLatestSaga() {
-  yield* takeLatest(actionTypes.{{name}}_{{method}}, saga);
+  yield* takeLatest(actionTypes.{{name}}_{{toLowerCase operation.method}}, saga);
 }
 
 export {
