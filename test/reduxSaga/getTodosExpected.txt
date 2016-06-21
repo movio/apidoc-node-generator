@@ -51,7 +51,7 @@ const actions = {
 function* saga(action) {
   try {
     yield put(actions.getTodos_doing());
-    const { response } = yield call(api);
+    const response = yield call(api, action.payload);
     yield put(actions.getTodos_success(response));
   } catch (error) {
     yield put(actions.getTodos_failure(error));

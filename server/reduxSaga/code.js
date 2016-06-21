@@ -7,18 +7,16 @@ import { createName } from './index';
 const templateSrc = fs.readFileSync(__dirname + '/mainTemplate.handlebars', 'utf8');
 const template = Handlebars.compile(templateSrc);
 
-function parameterList(params, prefix = '', lines = false, suffix = '') {
+function parameterList(params, lines = false) {
   const vals = _.map((param) => param.name, params);
   const separator = lines ? ',\n      ' : ', ';
-  return prefix + vals.join(separator) + suffix;
+  return vals.join(separator);
 }
 
 Handlebars.registerHelper('parameterList', (operation, options) => {
   const body = operation.body ? [{name:'__body'}] : [];
-  const prefix = operation.parameters.length > 0 && options.hash.prefix ? options.hash.prefix : '';
   const lines = options.hash.lines ? true : false;
-  const suffix = operation.parameters.length > 0 && options.hash.suffix ? options.hash.suffix : '';
-  return parameterList(body.concat(operation.parameters), prefix, lines, suffix);
+  return parameterList(body.concat(operation.parameters), lines);
 });
 
 Handlebars.registerHelper('toLowerCase', (str) => {
