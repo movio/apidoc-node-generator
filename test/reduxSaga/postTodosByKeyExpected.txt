@@ -29,7 +29,7 @@ const actions = {
    * 
    * @param {string} key - 
    */
-  postTodos_post: (__body, key) => ({
+  postTodos_post: ({__body, key} = {}) => ({
     type: actionTypes.postTodos_post,
     payload: {
       __body,

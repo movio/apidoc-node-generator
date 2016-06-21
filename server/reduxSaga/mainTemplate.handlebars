@@ -31,7 +31,7 @@ const actions = {
    {{{jsdocParameter this}}}
    {{/each}}
    */
-  {{name}}_{{toLowerCase operation.method}}: ({{parameterList operation}}) => ({
+  {{name}}_{{toLowerCase operation.method}}: ({{{parameterList operation prefix='{' lines=false suffix='} = {}' }}}) => ({
     type: actionTypes.{{name}}_{{toLowerCase operation.method}},
     payload: {
       {{parameterList operation lines=true}}

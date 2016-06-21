@@ -7,17 +7,18 @@ import { createName } from './index';
 const templateSrc = fs.readFileSync(__dirname + '/mainTemplate.handlebars', 'utf8');
 const template = Handlebars.compile(templateSrc);
 
-function parameterList(params, prefix = '', lines = false) {
-  const vals = _.map((param) => param.name, params)
+function parameterList(params, prefix = '', lines = false, suffix = '') {
+  const vals = _.map((param) => param.name, params);
   const separator = lines ? ',\n      ' : ', ';
-  return prefix + vals.join(separator);
+  return prefix + vals.join(separator) + suffix;
 }
 
 Handlebars.registerHelper('parameterList', (operation, options) => {
   const body = operation.body ? [{name:'__body'}] : [];
   const prefix = operation.parameters.length > 0 && options.hash.prefix ? options.hash.prefix : '';
   const lines = options.hash.lines ? true : false;
-  return parameterList(body.concat(operation.parameters), prefix, lines);
+  const suffix = operation.parameters.length > 0 && options.hash.suffix ? options.hash.suffix : '';
+  return parameterList(body.concat(operation.parameters), prefix, lines, suffix);
 });
 
 Handlebars.registerHelper('toLowerCase', (str) => {
@@ -29,7 +30,7 @@ Handlebars.registerHelper('jsdocParameter', (parameter) => {
   const optionalEquals = parameter.required ? '' : '=';
   const optionalDescription = parameter.required ? '' : ' (Optional)';
 
-  return `* @param {${parameter.type}${optionalEquals}} ${parameter.name} - ${print(parameter.description)}${optionalDescription}`
+  return `* @param {${parameter.type}${optionalEquals}} ${parameter.name} - ${print(parameter.description)}${optionalDescription}`;
 });
 
 function removeFormParams(parameters) {

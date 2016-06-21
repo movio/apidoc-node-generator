@@ -32,7 +32,7 @@ const actions = {
    * @param {string} firstName - first comes before last
    * @param {string=} lastName - last name (Optional)
    */
-  getTodosByKey1AndKey2_get: (key1, key2, firstName, lastName) => ({
+  getTodosByKey1AndKey2_get: ({key1, key2, firstName, lastName} = {}) => ({
     type: actionTypes.getTodosByKey1AndKey2_get,
     payload: {
       key1,
