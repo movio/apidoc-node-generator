@@ -5,6 +5,7 @@ import code from './code';
 const details = {
   key: 'reduxSaga',
   name: 'Redux Sagas',
+  attributes: [],
 };
 
 
@@ -42,6 +43,7 @@ function generateCode(service) {
   }, service.resources);
 
   return {
+    source: '',
     files,
   };
 }
