@@ -1,4 +1,5 @@
 // This file is generated
+/* eslint-disable max-len */
 
 import { takeEvery, takeLatest } from 'redux-saga';
 import { call, put } from 'redux-saga/effects';
@@ -40,9 +41,9 @@ const actions = {
   {{name}}_doing: () => ({
     type: actionTypes.{{name}}_doing,
   }),
-  {{name}}_success: (todos) => ({
+  {{name}}_success: (result) => ({
     type: actionTypes.{{name}}_success,
-    payload: todos,
+    payload: result,
   }),
   {{name}}_failure: (err) => ({
     type: actionTypes.{{name}}_failure,
