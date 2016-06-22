@@ -1,4 +1,5 @@
 // This file is generated
+/* eslint-disable max-len */
 
 import { takeEvery, takeLatest } from 'redux-saga';
 import { call, put } from 'redux-saga/effects';
@@ -37,9 +38,9 @@ const actions = {
   getTodos_doing: () => ({
     type: actionTypes.getTodos_doing,
   }),
-  getTodos_success: (todos) => ({
+  getTodos_success: (result) => ({
     type: actionTypes.getTodos_success,
-    payload: todos,
+    payload: result,
   }),
   getTodos_failure: (err) => ({
     type: actionTypes.getTodos_failure,
@@ -51,7 +52,7 @@ const actions = {
 function* saga(action) {
   try {
     yield put(actions.getTodos_doing());
-    const { response } = yield call(api);
+    const response = yield call(api, action.payload);
     yield put(actions.getTodos_success(response));
   } catch (error) {
     yield put(actions.getTodos_failure(error));

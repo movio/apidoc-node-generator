@@ -5,16 +5,17 @@ import fs from 'fs';
 import { code } from '../../server/reduxSaga';
 
 describe('Redux Saga Code Gen', () => {
-  const getTodos = fs.readFileSync(__dirname + '/getTodosExpected.txt', 'utf8');
-  const getTodosByKey1AndKey2 = fs.readFileSync(__dirname + '/getTodosByKey1AndKey2Expected.txt', 'utf8');
-  const postTodosByKey = fs.readFileSync(__dirname + '/postTodosByKeyExpected.txt', 'utf8');
+  const getTodos = fs.readFileSync(`${__dirname}/getTodosExpected.txt`, 'utf8');
+  const getTodosByKey1AndKey2 =
+          fs.readFileSync(`${__dirname}/getTodosByKey1AndKey2Expected.txt`, 'utf8');
+  const postTodosByKey = fs.readFileSync(`${__dirname}/postTodosByKeyExpected.txt`, 'utf8');
 
   it('should create code for GET with no params', () => {
     const operation = {
       method: 'GET',
       path: 'todos',
       parameters: [],
-    }
+    };
     expect(code(operation)).to.equal(getTodos);
   });
 
@@ -50,10 +51,10 @@ describe('Redux Saga Code Gen', () => {
           location: 'Query',
           type: 'string',
           required: false,
-          description: 'last name'
+          description: 'last name',
         },
       ],
-    }
+    };
     expect(code(operation)).to.equal(getTodosByKey1AndKey2);
   });
 
@@ -61,7 +62,7 @@ describe('Redux Saga Code Gen', () => {
     const operation = {
       method: 'POST',
       path: 'todos',
-      body: {type: 'string'},
+      body: { type: 'string' },
       parameters: [
         {
           name: 'key',
@@ -76,8 +77,8 @@ describe('Redux Saga Code Gen', () => {
           required: false,
         },
       ],
-    }
-    //fixme - add params
+    };
+    // fixme - add params
     expect(code(operation)).to.equal(postTodosByKey);
   });
 });

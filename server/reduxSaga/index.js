@@ -36,11 +36,11 @@ function createFile(resource, operation) {
 }
 
 function generateCode(service) {
-  const files = _.flatMap((resource) => {
-    return _.map((operation) => {
-      return createFile(resource, operation);
-    }, resource.operations);
-  }, service.resources);
+  const files = _.flatMap((resource) => (
+    _.map((operation) => (
+      createFile(resource, operation)
+    ), resource.operations)
+  ), service.resources);
 
   return {
     source: '',

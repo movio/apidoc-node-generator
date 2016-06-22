@@ -4,32 +4,28 @@ import fs from 'fs';
 
 import { createName } from './index';
 
-const templateSrc = fs.readFileSync(__dirname + '/mainTemplate.handlebars', 'utf8');
+const templateSrc = fs.readFileSync(`${__dirname}/mainTemplate.handlebars`, 'utf8');
 const template = Handlebars.compile(templateSrc);
 
-function parameterList(params, prefix = '', lines = false) {
-  const vals = _.map((param) => param.name, params)
+function parameterList(params, lines = false) {
+  const vals = _.map((param) => param.name, params);
   const separator = lines ? ',\n      ' : ', ';
-  return prefix + vals.join(separator);
+  return vals.join(separator);
 }
 
 Handlebars.registerHelper('parameterList', (operation, options) => {
-  const body = operation.body ? [{name:'__body'}] : [];
-  const prefix = operation.parameters.length > 0 && options.hash.prefix ? options.hash.prefix : '';
-  const lines = options.hash.lines ? true : false;
-  return parameterList(body.concat(operation.parameters), prefix, lines);
+  const body = operation.body ? [{ name: '__body' }] : [];
+  return parameterList(body.concat(operation.parameters), options.hash.lines);
 });
 
-Handlebars.registerHelper('toLowerCase', (str) => {
-  return str.toLowerCase();
-});
+Handlebars.registerHelper('toLowerCase', (str) => str.toLowerCase());
 
 Handlebars.registerHelper('jsdocParameter', (parameter) => {
   const print = (str) => str ? str : '';
   const optionalEquals = parameter.required ? '' : '=';
   const optionalDescription = parameter.required ? '' : ' (Optional)';
 
-  return `* @param {${parameter.type}${optionalEquals}} ${parameter.name} - ${print(parameter.description)}${optionalDescription}`
+  return `* @param {${parameter.type}${optionalEquals}} ${parameter.name} - ${print(parameter.description)}${optionalDescription}`;
 });
 
 function removeFormParams(parameters) {
@@ -40,7 +36,7 @@ export default function code(rawOperation) {
   const parameters = removeFormParams(rawOperation.parameters);
   const operation = {
     ...rawOperation,
-    parameters
+    parameters,
   };
 
   const context = {

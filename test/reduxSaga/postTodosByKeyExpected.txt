@@ -1,9 +1,10 @@
 // This file is generated
+/* eslint-disable max-len */
 
 import { takeEvery, takeLatest } from 'redux-saga';
 import { call, put } from 'redux-saga/effects';
 
-function api(__body, key) {
+function api({ __body, key } = {}) {
   return new Promise((resolve) => {
     const response = {
       todos: [
@@ -29,7 +30,7 @@ const actions = {
    * 
    * @param {string} key - 
    */
-  postTodos_post: (__body, key) => ({
+  postTodos_post: ({ __body, key } = {}) => ({
     type: actionTypes.postTodos_post,
     payload: {
       __body,
@@ -39,9 +40,9 @@ const actions = {
   postTodos_doing: () => ({
     type: actionTypes.postTodos_doing,
   }),
-  postTodos_success: (todos) => ({
+  postTodos_success: (result) => ({
     type: actionTypes.postTodos_success,
-    payload: todos,
+    payload: result,
   }),
   postTodos_failure: (err) => ({
     type: actionTypes.postTodos_failure,
@@ -51,10 +52,9 @@ const actions = {
 };
 
 function* saga(action) {
-  const { __body, key } = action.payload;
   try {
     yield put(actions.postTodos_doing());
-    const { response } = yield call(api, __body, key);
+    const response = yield call(api, action.payload);
     yield put(actions.postTodos_success(response));
   } catch (error) {
     yield put(actions.postTodos_failure(error));

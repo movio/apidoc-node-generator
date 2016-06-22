@@ -1,9 +1,10 @@
 // This file is generated
+/* eslint-disable max-len */
 
 import { takeEvery, takeLatest } from 'redux-saga';
 import { call, put } from 'redux-saga/effects';
 
-function api({{parameterList operation}}) {
+function api({{#if operation.parameters.length}}{ {{parameterList operation}} } = {}{{/if}}) {
   return new Promise((resolve) => {
     const response = {
       todos: [
@@ -31,7 +32,7 @@ const actions = {
    {{{jsdocParameter this}}}
    {{/each}}
    */
-  {{name}}_{{toLowerCase operation.method}}: ({{parameterList operation}}) => ({
+  {{name}}_{{toLowerCase operation.method}}: ({{#if operation.parameters.length}}{ {{parameterList operation}} } = {}{{/if}}) => ({
     type: actionTypes.{{name}}_{{toLowerCase operation.method}},
     payload: {
       {{parameterList operation lines=true}}
@@ -40,9 +41,9 @@ const actions = {
   {{name}}_doing: () => ({
     type: actionTypes.{{name}}_doing,
   }),
-  {{name}}_success: (todos) => ({
+  {{name}}_success: (result) => ({
     type: actionTypes.{{name}}_success,
-    payload: todos,
+    payload: result,
   }),
   {{name}}_failure: (err) => ({
     type: actionTypes.{{name}}_failure,
@@ -52,12 +53,9 @@ const actions = {
 };
 
 function* saga(action) {
-  {{#if operation.parameters.length}}
-  const { {{parameterList operation}} } = action.payload;
-  {{/if}}
   try {
     yield put(actions.{{name}}_doing());
-    const { response } = yield call(api{{parameterList operation prefix=', '}});
+    const response = yield call(api, action.payload);
     yield put(actions.{{name}}_success(response));
   } catch (error) {
     yield put(actions.{{name}}_failure(error));

@@ -11,7 +11,7 @@ describe('Generators', () => {
       .get('/generators')
       .expect(200)
       .end((err, res) => {
-        if (err) return done(err);
+        if (err) done(err);
         expect(res.body[0]).to.have.property('key', 'jsonSchema');
         expect(res.body[1]).to.have.property('key', 'reduxSaga');
         done();
@@ -23,7 +23,7 @@ describe('Generators', () => {
       .get('/generator/jsonSchema')
       .expect(200)
       .end((err, res) => {
-        if (err) return done(err);
+        if (err) done(err);
         expect(res.body).to.have.property('key', 'jsonSchema');
         done();
       });

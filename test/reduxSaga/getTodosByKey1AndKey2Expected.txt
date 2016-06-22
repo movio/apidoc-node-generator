@@ -1,9 +1,10 @@
 // This file is generated
+/* eslint-disable max-len */
 
 import { takeEvery, takeLatest } from 'redux-saga';
 import { call, put } from 'redux-saga/effects';
 
-function api(key1, key2, firstName, lastName) {
+function api({ key1, key2, firstName, lastName } = {}) {
   return new Promise((resolve) => {
     const response = {
       todos: [
@@ -32,7 +33,7 @@ const actions = {
    * @param {string} firstName - first comes before last
    * @param {string=} lastName - last name (Optional)
    */
-  getTodosByKey1AndKey2_get: (key1, key2, firstName, lastName) => ({
+  getTodosByKey1AndKey2_get: ({ key1, key2, firstName, lastName } = {}) => ({
     type: actionTypes.getTodosByKey1AndKey2_get,
     payload: {
       key1,
@@ -44,9 +45,9 @@ const actions = {
   getTodosByKey1AndKey2_doing: () => ({
     type: actionTypes.getTodosByKey1AndKey2_doing,
   }),
-  getTodosByKey1AndKey2_success: (todos) => ({
+  getTodosByKey1AndKey2_success: (result) => ({
     type: actionTypes.getTodosByKey1AndKey2_success,
-    payload: todos,
+    payload: result,
   }),
   getTodosByKey1AndKey2_failure: (err) => ({
     type: actionTypes.getTodosByKey1AndKey2_failure,
@@ -56,10 +57,9 @@ const actions = {
 };
 
 function* saga(action) {
-  const { key1, key2, firstName, lastName } = action.payload;
   try {
     yield put(actions.getTodosByKey1AndKey2_doing());
-    const { response } = yield call(api, key1, key2, firstName, lastName);
+    const response = yield call(api, action.payload);
     yield put(actions.getTodosByKey1AndKey2_success(response));
   } catch (error) {
     yield put(actions.getTodosByKey1AndKey2_failure(error));

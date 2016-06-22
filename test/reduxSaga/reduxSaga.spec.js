@@ -9,26 +9,12 @@ import { createName } from '../../server/reduxSaga';
 import service from '../reduxSaga/generatorService.json';
 
 describe('Redux Saga', () => {
-
   it('should be able to get list of files from the api', (done) => {
-    const invocation_form = {service};
-
-    const expected = {
-      files: [
-        {
-          name: 'getGenerators',
-          dir: 'generator',
-        },
-        {
-          name: 'getGeneratorsByKey',
-          dir: 'generator',
-        },
-      ],
-    };
+    const invocationForm = { service };
 
     request(http.createServer(app.callback()))
       .post('/invocations/reduxSaga')
-      .send(invocation_form)
+      .send(invocationForm)
       .expect((res) => {
         // console.log(res.body)
 
@@ -37,7 +23,7 @@ describe('Redux Saga', () => {
         expect(res.body).to.have.deep.property('files[1].name', 'getGeneratorsByKey');
         expect(res.body).to.have.deep.property('files[1].dir', 'generator');
       })
-      .expect(200, done)
+      .expect(200, done);
   });
 
   it('createName', () => {
