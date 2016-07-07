@@ -3,19 +3,15 @@
 
 import { takeEvery, takeLatest } from 'redux-saga';
 import { call, put } from 'redux-saga/effects';
+import * as request from 'superagent';
 
 function api() {
-  return new Promise((resolve) => {
-    const response = {
-      todos: [
-        {
-          text: 'Use Redux',
-          completed: false,
-        },
-      ],
-    };
-    resolve(response);
-  });
+
+  const queryData = Object.assign({});
+
+  return request
+    .get(`todos`)
+    .query(queryData);
 }
 
 const actionTypes = {
@@ -52,8 +48,8 @@ const actions = {
 function* saga(action) {
   try {
     yield put(actions.getTodos_doing());
-    const response = yield call(api, action.payload);
-    yield put(actions.getTodos_success(response));
+    const { body } = yield call(api, action.payload);
+    yield put(actions.getTodos_success(body));
   } catch (error) {
     yield put(actions.getTodos_failure(error));
   }

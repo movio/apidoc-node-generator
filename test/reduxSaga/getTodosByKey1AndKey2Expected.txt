@@ -3,19 +3,22 @@
 
 import { takeEvery, takeLatest } from 'redux-saga';
 import { call, put } from 'redux-saga/effects';
+import * as request from 'superagent';
 
-function api({ key1, key2, firstName, lastName } = {}) {
-  return new Promise((resolve) => {
-    const response = {
-      todos: [
-        {
-          text: 'Use Redux',
-          completed: false,
-        },
-      ],
-    };
-    resolve(response);
-  });
+function api({
+  key1,
+  key2,
+  firstName,
+  lastName = undefined } = {}) {
+
+  const queryData = Object.assign(
+    firstName ? { firstName } : {},
+    lastName ? { lastName } : {}
+  );
+
+  return request
+    .get(`todos/${key1}/${key2}`)
+    .query(queryData);
 }
 
 const actionTypes = {
@@ -33,7 +36,11 @@ const actions = {
    * @param {string} firstName - first comes before last
    * @param {string=} lastName - last name (Optional)
    */
-  getTodosByKey1AndKey2_get: ({ key1, key2, firstName, lastName } = {}) => ({
+  getTodosByKey1AndKey2_get: ({
+    key1,
+    key2,
+    firstName,
+    lastName = undefined } = {}) => ({
     type: actionTypes.getTodosByKey1AndKey2_get,
     payload: {
       key1,
@@ -59,8 +66,8 @@ const actions = {
 function* saga(action) {
   try {
     yield put(actions.getTodosByKey1AndKey2_doing());
-    const response = yield call(api, action.payload);
-    yield put(actions.getTodosByKey1AndKey2_success(response));
+    const { body } = yield call(api, action.payload);
+    yield put(actions.getTodosByKey1AndKey2_success(body));
   } catch (error) {
     yield put(actions.getTodosByKey1AndKey2_failure(error));
   }

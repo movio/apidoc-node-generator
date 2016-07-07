@@ -3,19 +3,18 @@
 
 import { takeEvery, takeLatest } from 'redux-saga';
 import { call, put } from 'redux-saga/effects';
+import * as request from 'superagent';
 
-function api({{#if operation.parameters.length}}{ {{parameterList operation}} } = {}{{/if}}) {
-  return new Promise((resolve) => {
-    const response = {
-      todos: [
-        {
-          text: 'Use Redux',
-          completed: false,
-        },
-      ],
-    };
-    resolve(response);
-  });
+function api({{#if operation.parameters.length}}{
+  {{{parameterList operation lines=true initUndefined=true indent=2}}} } = {}{{/if}}) {
+
+  const queryData = Object.assign({{#if operation.parameters.length}}
+    {{{ createObjectList operation indent=4}}}
+  {{else}}{}{{/if}});
+
+  return request
+    .get(`{{ createPath operation }}`)
+    .query(queryData);
 }
 
 const actionTypes = {
@@ -32,10 +31,11 @@ const actions = {
    {{{jsdocParameter this}}}
    {{/each}}
    */
-  {{name}}_{{toLowerCase operation.method}}: ({{#if operation.parameters.length}}{ {{parameterList operation}} } = {}{{/if}}) => ({
+  {{name}}_{{toLowerCase operation.method}}: ({{#if operation.parameters.length}}{
+    {{{parameterList operation lines=true initUndefined=true indent=4}}} } = {}{{/if}}) => ({
     type: actionTypes.{{name}}_{{toLowerCase operation.method}},
     payload: {
-      {{parameterList operation lines=true}}
+      {{parameterList operation lines=true indent=6}}
     },
   }),
   {{name}}_doing: () => ({
@@ -55,8 +55,8 @@ const actions = {
 function* saga(action) {
   try {
     yield put(actions.{{name}}_doing());
-    const response = yield call(api, action.payload);
-    yield put(actions.{{name}}_success(response));
+    const { body } = yield call(api, action.payload);
+    yield put(actions.{{name}}_success(body));
   } catch (error) {
     yield put(actions.{{name}}_failure(error));
   }
